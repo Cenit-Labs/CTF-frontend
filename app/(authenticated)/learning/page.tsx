@@ -1,0 +1,21 @@
+"use client";
+import React, { useState } from 'react';
+import Sidebar from '@/components/layout/Sidebar';
+import { BookOpen, Clock, Award } from 'lucide-react';
+
+const LearningPage = () => {
+	const [courses] = useState([
+		{ id: 1, title: 'Intro to Cryptography', progress: 98, type: 'Course' },
+		{ id: 2, title: 'Web Exploitation Basics', progress: 45, type: 'Course' },
+		{ id: 3, title: 'OSINT Fundamentals', progress: 12, type: 'Course' },
+		{ id: 4, title: 'Binary Exploitation', progress: 0, type: 'Course' }
+	]);
+
+	return (
+		<div className="flex h-screen bg-black text-white font-sans">
+			<Sidebar />
+		</div>
+	);
+};
+
+export default LearningPage;
