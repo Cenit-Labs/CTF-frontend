@@ -1,0 +1,13 @@
+{
+  "/(auth)/login/page": "/login",
+  "/(auth)/register/page": "/register",
+  "/(authenticated)/challenges/page": "/challenges",
+  "/(authenticated)/dashboard/page": "/dashboard",
+  "/(authenticated)/events/page": "/events",
+  "/(authenticated)/learning/page": "/learning",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/auth/google/route": "/api/auth/google",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/"
+}
