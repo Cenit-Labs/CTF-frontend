@@ -1,29 +1,41 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shield, Eye, EyeOff } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GoogleOAuthButton from '@/components/auth/GoogleOAuthButton';
+import { authService } from '@/lib/auth';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/dashboard';
 
-  // Read `redirectTo` from query string (set by middleware) so we can return
-  // the user to their original destination after login.
-  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-  const redirectTo = params?.get('redirectTo') || '/dashboard';
-
-  const handleSubmit = () => {
-    // For quick local testing we set a non-HttpOnly cookie so the middleware
-    // sees a token. In production the server should set a secure HttpOnly cookie
-    // after authenticating and we shouldn't set cookies from the client.
-    if (process.env.NODE_ENV !== 'production' && typeof document !== 'undefined') {
-      document.cookie = `token=dev-test; path=/`;
+  useEffect(() => {
+    const token = searchParams.get('token');
+    if (token) {
+      localStorage.setItem('authToken', token);
+      router.replace(redirectTo);
     }
+  }, [searchParams, router, redirectTo]);
 
-    router.push(redirectTo);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await authService.login(email, password);
+      router.push(redirectTo);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRegister = () => {
@@ -41,7 +53,7 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-5xl bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl flex">
           {/* Left Panel - Geometric Design */}
-          <div className="hidden md:block w-1/2 bg-gradient-to-br from-orange-600 via-orange-500 to-orange-600 relative overflow-hidden">
+          <div className="hidden md:block w-1/2 bg-linear-to-br from-orange-600 via-orange-500 to-orange-600 relative overflow-hidden">
             <div className="absolute inset-0">
               {/* Geometric shapes */}
               <div className="absolute top-0 left-0 w-full h-full opacity-40">
@@ -51,8 +63,8 @@ export default function LoginPage() {
               </div>
               {/* Angular overlays */}
               <div className="absolute inset-0 opacity-30">
-                <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-br from-orange-700 to-transparent transform skew-y-12"></div>
-                <div className="absolute bottom-0 right-0 w-full h-1/2 bg-gradient-to-tl from-orange-800 to-transparent transform -skew-y-12"></div>
+                <div className="absolute top-0 left-0 w-full h-1/2 bg-linear-to-br from-orange-700 to-transparent transform skew-y-12"></div>
+                <div className="absolute bottom-0 right-0 w-full h-1/2 bg-linear-to-tl from-orange-800 to-transparent transform -skew-y-12"></div>
               </div>
             </div>
           </div>
@@ -62,7 +74,13 @@ export default function LoginPage() {
             <div className="max-w-sm mx-auto w-full">
               <h2 className="text-3xl font-bold text-orange-500 mb-8">Welcome Back</h2>
 
-              <div className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
+
                 {/* Email Input */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-neutral-400 mb-2">
@@ -108,10 +126,11 @@ export default function LoginPage() {
 
                 {/* Submit Button */}
                 <button
-                  onClick={handleSubmit}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-black font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg"
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-500/50 text-black font-semibold py-3 px-4 rounded-lg transition-colors shadow-lg"
                 >
-                  Login
+                  {loading ? 'Logging in...' : 'Login'}
                 </button>
 
                 {/* Forgot Password */}
@@ -135,19 +154,20 @@ export default function LoginPage() {
                 </div>
 
                 {/* Google Button */}
-                <GoogleOAuthButton label='Google'/>
+                <GoogleOAuthButton label='Google' />
 
                 {/* Sign Up Link */}
                 <p className="text-center text-sm text-neutral-400 mt-4">
                   Don't have an account?{' '}
                   <button
+                    type="button"
                     onClick={handleRegister}
                     className="text-orange-500 hover:text-orange-400 font-medium transition-colors"
                   >
                     Sign up
                   </button>
                 </p>
-              </div>
+              </form>
             </div>
           </div>
         </div>

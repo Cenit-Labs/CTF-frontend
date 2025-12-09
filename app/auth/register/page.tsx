@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import GoogleOAuthButton from '@/components/auth/GoogleOAuthButton';
+import { authService } from '@/lib/auth';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -11,13 +12,22 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [college, setCollege] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignUp = () => {
-    console.log('Sign up submitted:', { fullName, username, email, password, college });
-  };
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-  const handleGoogleSignUp = () => {
-    console.log('Google sign up');
+    try {
+      await authService.register(email, password, username);
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLoginRedirect = () => {
@@ -42,7 +52,13 @@ export default function RegisterPage() {
         <div className="flex-1 p-12">
           <h1 className="text-3xl font-bold text-orange-500 mb-8">Create Account</h1>
 
-          <div className="space-y-4">
+          <form onSubmit={handleSignUp} className="space-y-4">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Full Name */}
             <input
               type="text"
@@ -90,10 +106,11 @@ export default function RegisterPage() {
 
             {/* Sign Up Button */}
             <button
-              onClick={handleSignUp}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded transition-colors shadow-lg shadow-orange-500/20"
+              type="submit"
+              disabled={loading}
+              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-500/50 text-white font-semibold py-3 px-4 rounded transition-colors shadow-lg shadow-orange-500/20"
             >
-              Sign up
+              {loading ? 'Creating account...' : 'Sign up'}
             </button>
 
             {/* Divider */}
@@ -119,7 +136,7 @@ export default function RegisterPage() {
                 Login
               </button>
             </div>
-          </div>
+          </form>
         </div>
 
         {/* Right Side - Decorative */}

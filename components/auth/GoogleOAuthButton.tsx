@@ -12,12 +12,8 @@ export default function GoogleOAuthButton({ label = 'Continue with Google', clas
 	const handleClick = async () => {
 		try {
 			setLoading(true);
-			const res = await fetch('/api/auth/google/url');
-			if (!res.ok) throw new Error('Failed to get Google auth URL');
-			const data = await res.json();
-			if (!data?.url) throw new Error('No URL returned');
-			// Redirect browser to Google OAuth URL
-			window.location.href = data.url;
+			const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+			window.location.href = `${apiUrl}/auth/google`;
 		} catch (err) {
 			console.error(err);
 			alert('Unable to start Google sign-in. Please try again.');
