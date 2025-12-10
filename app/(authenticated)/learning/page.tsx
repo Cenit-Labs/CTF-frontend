@@ -14,6 +14,9 @@ const LearningPage = () => {
 	return (
 		<div className="flex h-screen bg-black text-white font-sans">
 			<Sidebar />
+			<main className="flex-1 ml-64 p-4 md:p-6 lg:p-8 overflow-y-auto h-screen bg-black">
+				{/* Learning content will go here */}
+			</main>
 		</div>
 	);
 };

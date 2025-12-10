@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Settings } from 'lucide-react';
+import { User } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
 
 const ChallengesPage = () => {
@@ -81,12 +81,12 @@ const ChallengesPage = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
+      <div className="flex-1 ml-64 p-4 md:p-6 lg:p-8 overflow-y-auto h-screen bg-black">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Challenges</h1>
           <button className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
-            <Settings size={20} className="text-black" />
+            <User size={20} className="text-black" />
           </button>
         </div>
 

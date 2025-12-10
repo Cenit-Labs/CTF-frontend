@@ -43,7 +43,7 @@ const EventsPage = () => {
     <div className="flex h-screen bg-black text-white font-sans">
       <Sidebar />
 
-      <div className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 ml-64 p-4 md:p-6 lg:p-8 overflow-y-auto h-screen bg-black">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Events</h1>
           <button className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
@@ -149,7 +149,7 @@ const EventsPage = () => {
             </div>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
