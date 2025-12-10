@@ -18,11 +18,11 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/challenges/:path*',
-    '/events/:path*',
-    '/learning/:path*',
-    '/rooms/:path*',
-    '/host/:path*',
+    // '/dashboard/:path*',
+    // '/challenges/:path*',
+    // '/events/:path*',
+    // '/learning/:path*',
+    // '/rooms/:path*',
+    // '/host/:path*',
   ],
 };
