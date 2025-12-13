@@ -1,5 +1,7 @@
-import React from 'react';
-import { Target, BookOpen, Trophy, Calendar, Users } from 'lucide-react';
+"use client";
+
+import React, { useEffect, useRef, useState } from 'react';
+import { Target, BookOpen, Trophy } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
 
 interface StatCardProps {
@@ -55,6 +57,67 @@ const ProfilePage: React.FC = () => {
     return colors[intensity];
   };
 
+  // Profile state (editable)
+  const [showModal, setShowModal] = useState(false);
+  const [displayName, setDisplayName] = useState('Mathew Joseph T A');
+  const [displayAvatar, setDisplayAvatar] = useState<string | null>('https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&h=200&fit=crop');
+  const [displayCollege, setDisplayCollege] = useState<string | null>(null);
+
+  // Form state inside modal
+  const [formName, setFormName] = useState(displayName);
+  const [formCollege, setFormCollege] = useState<string | null>(displayCollege);
+  const [formAvatarPreview, setFormAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // Modal view: 'profile' for edit profile, 'security' for security settings
+  const [modalView, setModalView] = useState<'profile' | 'security'>('profile');
+  // Password modal state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+
+  useEffect(() => {
+    // Sync form defaults when opening modal
+    if (showModal) {
+      setFormName(displayName);
+      setFormCollege(displayCollege);
+      setFormAvatarPreview(displayAvatar);
+      // reset modal view to profile when modal opens
+      setModalView('profile');
+    }
+  }, [showModal]);
+
+  const colleges = [
+    'Select college',
+    'Ravish Tech Univ',
+    'Adi shankara',
+
+  ];
+
+  const handleFileClick = () => fileInputRef.current?.click();
+
+  const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFormAvatarPreview(url);
+    }
+  };
+
+  const handleSave = () => {
+    // For now, just update local display state and close modal
+    setDisplayName(formName || displayName);
+    setDisplayCollege(formCollege || displayCollege);
+    setDisplayAvatar(formAvatarPreview || displayAvatar);
+    setShowModal(false);
+  };
+
+  const handleCancel = () => {
+    // Revoke created object URL when cancelling or closing to avoid leaks
+    if (formAvatarPreview && formAvatarPreview !== displayAvatar) {
+      try { URL.revokeObjectURL(formAvatarPreview); } catch (e) {}
+    }
+    setShowModal(false);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex">
       {/* Sidebar */}
@@ -82,18 +145,21 @@ const ProfilePage: React.FC = () => {
           {/* Profile Info */}
           <div className="flex items-end justify-between -mx-8 px-8 -mt-16 relative z-10">
             <div className="flex items-end gap-6">
-              <img 
-                src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&h=200&fit=crop" 
-                alt="Profile" 
+              <img
+                src={displayAvatar ?? 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200&h=200&fit=crop'}
+                alt="Profile"
                 className="w-32 h-32 rounded-full border-4 border-black object-cover"
               />
               <div className="mb-2">
-                <h2 className="text-3xl font-bold">Mathew Joseph T A</h2>
+                <h2 className="text-3xl font-bold">{displayName}</h2>
                 <p className="text-zinc-400">@mathewjosephta</p>
-                <p className="text-zinc-500 text-sm mt-1">🗓️ Joined Dec 2025</p>
+                <p className="text-zinc-500 text-sm mt-1">{displayCollege ? `🏫 ${displayCollege}` : '🗓️ Joined Dec 2025'}</p>
               </div>
             </div>
-            <button className="bg-orange-500 hover:bg-orange-600 text-black font-semibold py-3 px-8 rounded-lg transition mb-2">
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-orange-500 hover:bg-orange-600 text-black font-semibold py-3 px-8 rounded-lg transition mb-2"
+            >
               Edit Profile
             </button>
           </div>
@@ -183,6 +249,125 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={handleCancel} />
+
+          <div className="relative bg-zinc-900 rounded-2xl p-6 w-[min(720px,92%)] border border-zinc-800 z-10">
+            <h3 className="text-2xl font-bold mb-4">{modalView === 'profile' ? 'Edit Profile' : 'Security Settings'}</h3>
+
+            {modalView === 'profile' ? (
+              <>
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">Avatar</label>
+                    <div className="flex items-center gap-4">
+                      <div className="w-24 h-24 rounded-full overflow-hidden border border-zinc-800 bg-zinc-800">
+                        <img src={formAvatarPreview ?? displayAvatar ?? ''} alt="Avatar preview" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <button type="button" onClick={handleFileClick} className="bg-zinc-800 text-white px-3 py-2 rounded">Upload</button>
+                        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                        <p className="text-zinc-500 text-sm">PNG, JPG up to 2MB</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-zinc-400 mb-2">Name</label>
+                    <input value={formName} onChange={(e) => setFormName(e.target.value)} className="w-full bg-black/20 border border-zinc-800 rounded px-3 py-2 text-white" />
+
+                    <label className="block text-sm text-zinc-400 mb-2 mt-4">College</label>
+                    <select value={formCollege ?? 'Select college'} onChange={(e) => setFormCollege(e.target.value === 'Select college' ? null : e.target.value)} className="w-full bg-black/20 border border-zinc-800 rounded px-3 py-2 text-white">
+                      {colleges.map((c) => (
+                        <option key={c} value={c} className="text-black">{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </>
+            ) : (
+              // Security view
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-zinc-400">Account password</p>
+                  <button type="button" onClick={() => setShowPasswordModal(true)} className="px-3 py-1 rounded bg-orange-500 text-black font-semibold cursor-pointer">Change password</button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-zinc-400">Active Sessions</p>
+                  <p className="text-sm text-zinc-300">1</p>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between items-center mt-6">
+              {/* Left: Security Settings link (only show when in profile view) */}
+              <div>
+                {modalView === 'profile' ? (
+                  <button type="button" onClick={() => setModalView('security')} className="text-sm text-orange-500 underline cursor-pointer">
+                    Security Settings
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => setModalView('profile')} className="text-sm text-zinc-400 underline cursor-pointer">
+                    Back to Edit
+                  </button>
+                )}
+              </div>
+
+              {/* Right: Cancel / Save */}
+              <div className="flex gap-3">
+                <button onClick={handleCancel} className="px-4 py-2 rounded bg-transparent border border-zinc-700 text-zinc-300">Cancel</button>
+                <button onClick={handleSave} className="px-4 py-2 rounded bg-orange-500 text-black font-semibold">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Password setup modal (opened from Security Settings -> Change password) */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowPasswordModal(false)} />
+
+          <div className="relative bg-zinc-900 rounded-2xl p-6 w-[min(480px,92%)] border border-zinc-800 z-10">
+            <h3 className="text-2xl font-bold mb-2">Setup Password</h3>
+            <p className="text-zinc-400 text-sm mb-4">You can change your account password here. Choose a strong password and click Reset Password to apply.</p>
+
+            <label className="block text-sm text-zinc-400 mb-2">New password</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-black/20 border border-zinc-800 rounded px-3 py-2 text-white"
+              placeholder="Enter new password"
+            />
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button onClick={() => setShowPasswordModal(false)} className="px-4 py-2 rounded bg-transparent border border-zinc-700 text-zinc-300">Cancel</button>
+              <button
+                onClick={() => {
+                  // UI-only action: perform basic validation and close modal
+                  if (!newPassword) {
+                    // minimal feedback — keep it simple for now
+                    try { alert('Please enter a new password'); } catch (e) {}
+                    return;
+                  }
+                  // In a real app, call API to reset password here
+                  try { console.log('Resetting password to:', newPassword); } catch (e) {}
+                  setNewPassword('');
+                  setShowPasswordModal(false);
+                }}
+                className="px-4 py-2 rounded bg-orange-500 text-black font-semibold cursor-pointer"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
