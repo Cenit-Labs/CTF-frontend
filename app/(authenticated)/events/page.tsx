@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Calendar, Users, Search, User, MapPin, Clock, Send } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
+import Header from '@/components/layout/Header';
 
 
 const EventsPage = () => {
@@ -46,11 +47,8 @@ const EventsPage = () => {
       <Sidebar />
 
       <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen bg-black">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Events</h1>
-          <button className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
-            <User size={20} className="text-black" />
-          </button>
+        <div className="mb-8">
+          <Header/>
         </div>
 
         <div className="flex gap-4 mb-8">

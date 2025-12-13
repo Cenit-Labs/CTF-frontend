@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { User, CheckCircle, Lock, RefreshCw } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
+import Header from '@/components/layout/Header';
 
 const Dashboard = () => {
   const [userData] = useState({
@@ -35,15 +36,10 @@ const Dashboard = () => {
       <Sidebar />
       <main className="flex-1 ml-64 p-4 md:p-6 lg:p-8 overflow-y-auto h-screen bg-black">
         {/* Header Section */}
-        <div className="mb-6 md:mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="text-orange-500 text-xl md:text-2xl font-bold">logo</div>
-            <button className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
-              <User size={20} className="text-black" />
-            </button>
-          </div>
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">Welcome Back, {userData.name}</h1>
-          
+        <div className="mb-8">
+          <Header/>
+        </div>
+        <div className="mb-6 md:mb-8">          
           <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
             {/* Left Side - Stats Grid 2x2 */}
             <div className="grid grid-cols-2 gap-3 md:gap-4 w-full lg:w-[45%] lg:flex-shrink-0">
