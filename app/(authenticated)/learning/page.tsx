@@ -110,12 +110,13 @@ export default function LearningPlatform() {
       <Sidebar/>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 overflow-y-auto p-8">
-        <div className="mb-8">
-          <Header/>
-        </div>
+      <main className="flex-1 ml-64 overflow-hidden p-8">
+        <div className="relative">
+          <div className="mb-8">
+            <Header/>
+          </div>
 
-        {/* Course Grid */}
+          {/* Course Grid */}
         <div className="grid grid-cols-3 gap-6">
           {courses.map((course, index) => (
             <div 
@@ -141,6 +142,14 @@ export default function LearningPlatform() {
               </button>
             </div>
           ))}
+        </div>
+          {/* Blur overlay */}
+        <div className="absolute inset-0 z-40 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+          <span className="relative text-3xl md:text-5xl text-white font-bold uppercase tracking-wider pointer-events-auto">
+            Coming Soon
+          </span>
+        </div>
         </div>
       </main>
     </div>
