@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { User, Menu, Target, BookOpen, Calendar, Users, ChevronDown } from 'lucide-react';
+import Sidebar from '@/components/layout/Sidebar';
+import Header from '@/components/layout/Header';
 
 const ChallengesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,49 +150,15 @@ const ChallengesPage = () => {
     <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
       {/* Sidebar */}
       <div className="w-64 bg-black border-r border-gray-800 flex flex-col">
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-orange-500">logo</h1>
-        </div>
-
-        <nav className="flex-1 px-4">
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all mb-2">
-            <Menu size={20} />
-            <span>Dashboard</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all mb-2">
-            <BookOpen size={20} />
-            <span>Learning Path</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-900 text-orange-500 transition-all mb-2">
-            <Target size={20} />
-            <span>Challenges</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all mb-2">
-            <Calendar size={20} />
-            <span>Events</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all mb-2">
-            <Users size={20} />
-            <span>Rooms</span>
-          </a>
-        </nav>
-
-        <div className="p-4">
-          <button className="w-full bg-orange-500 text-black font-bold py-3 rounded-lg hover:bg-orange-600 transition-all">
-            Host a CTF
-          </button>
-        </div>
+        <Sidebar/>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 ml-0 flex flex-col overflow-hidden">
         {/* Header Section */}
         <div className="border-b border-gray-800 p-8 flex-shrink-0">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold">Challenges</h1>
-            <button className="bg-orange-500 text-black rounded-full p-3 hover:bg-orange-600">
-              <User size={24} />
-            </button>
+          <div className="mb-6">
+            <Header/>
           </div>
 
           {/* Search and Filters */}
