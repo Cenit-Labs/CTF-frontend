@@ -36,7 +36,7 @@ const Dashboard = () => {
       <Sidebar />
       <main className="flex-1 ml-0 sm:ml-64 p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto h-screen bg-black">
         {/* Header Section */}
-        <div className="mb-4 sm:mb-6 md:mb-8">
+        <div className="mb-4 sm:mb-6 ml-14 mt-1 md:mb-8">
           <Header/>
         </div>
         <div className="mb-4 sm:mb-6 md:mb-8">          

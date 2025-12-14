@@ -32,7 +32,7 @@ const ChallengesPage = () => {
     { id: 15, title: "SQL Injection", category: "Web Exploitation", difficulty: "Easy", xp: 100, status: "not-started" },
   ];
 
-  const challengesPerPage = 6; // 2 rows x 3 columns
+  const challengesPerPage = 6; // 2 rows x 3 columns on desktop
 
   // Filter challenges
   const filteredChallenges = allChallenges.filter(challenge => {
@@ -84,7 +84,7 @@ const ChallengesPage = () => {
           <button
             key={i}
             onClick={() => goToPage(i)}
-            className={`w-10 h-10 rounded-lg font-bold transition-all ${
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
               currentPage === i ? 'bg-orange-500 text-black' : 'text-gray-500 hover:text-white'
             }`}
           >
@@ -97,7 +97,7 @@ const ChallengesPage = () => {
         <button
           key={1}
           onClick={() => goToPage(1)}
-          className={`w-10 h-10 rounded-lg font-bold transition-all ${
+          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
             currentPage === 1 ? 'bg-orange-500 text-black' : 'text-gray-500 hover:text-white'
           }`}
         >
@@ -106,7 +106,7 @@ const ChallengesPage = () => {
       );
 
       if (currentPage > 3) {
-        pages.push(<span key="dots1" className="text-gray-500 px-2">..</span>);
+        pages.push(<span key="dots1" className="text-gray-500 px-1 sm:px-2">..</span>);
       }
 
       const start = Math.max(2, currentPage - 1);
@@ -117,7 +117,7 @@ const ChallengesPage = () => {
           <button
             key={i}
             onClick={() => goToPage(i)}
-            className={`w-10 h-10 rounded-lg font-bold transition-all ${
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
               currentPage === i ? 'bg-orange-500 text-black' : 'text-gray-500 hover:text-white'
             }`}
           >
@@ -127,14 +127,14 @@ const ChallengesPage = () => {
       }
 
       if (currentPage < totalPages - 2) {
-        pages.push(<span key="dots2" className="text-gray-500 px-2">..</span>);
+        pages.push(<span key="dots2" className="text-gray-500 px-1 sm:px-2">..</span>);
       }
 
       pages.push(
         <button
           key={totalPages}
           onClick={() => goToPage(totalPages)}
-          className={`w-10 h-10 rounded-lg font-bold transition-all ${
+          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
             currentPage === totalPages ? 'bg-orange-500 text-black' : 'text-gray-500 hover:text-white'
           }`}
         >
@@ -149,49 +149,47 @@ const ChallengesPage = () => {
   return (
     <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
       {/* Sidebar */}
-      <div className="w-64 bg-black border-r border-gray-800 flex flex-col">
-        <Sidebar/>
-      </div>
+      <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 ml-0 flex flex-col overflow-hidden">
+      <div className="flex-1 ml-0 sm:ml-64 flex flex-col overflow-hidden">
         {/* Header Section */}
-        <div className="border-b border-gray-800 p-8 flex-shrink-0">
-          <div className="mb-6">
+        <div className="border-b border-gray-800 p-3 sm:p-4 md:p-6 lg:p-8 flex-shrink-0">
+          <div className="mb-3 sm:mb-4 ml-14 mt-1 md:mb-6">
             <Header/>
           </div>
 
           {/* Search and Filters */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4">
             <div className="flex-1 relative">
               <input
                 type="text"
                 placeholder="Search Challenges"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-800 text-gray-300 rounded-lg px-12 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full bg-gray-800 text-gray-300 rounded-lg px-10 sm:px-12 py-2 sm:py-2.5 md:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
-              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
             </div>
             
             {/* Difficulty Filter */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-initial">
               <button 
                 onClick={() => {
                   setShowDifficultyDropdown(!showDifficultyDropdown);
                   setShowCategoryDropdown(false);
                   setShowStatusDropdown(false);
                 }}
-                className="bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 flex items-center gap-2 min-w-[140px]"
+                className="w-full sm:w-auto bg-gray-800 text-gray-300 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg hover:bg-gray-700 flex items-center justify-between gap-2 sm:min-w-[140px] text-sm sm:text-base"
               >
                 {selectedDifficulty}
                 <ChevronDown size={16} />
               </button>
               {showDifficultyDropdown && (
-                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 min-w-[140px] border border-gray-700">
+                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 w-full sm:min-w-[140px] border border-gray-700">
                   {['All', 'Easy', 'Medium', 'Hard'].map(diff => (
                     <button
                       key={diff}
@@ -200,7 +198,7 @@ const ChallengesPage = () => {
                         setShowDifficultyDropdown(false);
                         setCurrentPage(1);
                       }}
-                      className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
+                      className="block w-full text-left px-4 py-2 text-sm sm:text-base text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
                     >
                       {diff}
                     </button>
@@ -210,20 +208,20 @@ const ChallengesPage = () => {
             </div>
 
             {/* Category Filter */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-initial">
               <button 
                 onClick={() => {
                   setShowCategoryDropdown(!showCategoryDropdown);
                   setShowDifficultyDropdown(false);
                   setShowStatusDropdown(false);
                 }}
-                className="bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 flex items-center gap-2 min-w-[180px]"
+                className="w-full sm:w-auto bg-gray-800 text-gray-300 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg hover:bg-gray-700 flex items-center justify-between gap-2 sm:min-w-[180px] text-sm sm:text-base"
               >
-                {selectedCategory}
-                <ChevronDown size={16} />
+                <span className="truncate">{selectedCategory}</span>
+                <ChevronDown size={16} className="flex-shrink-0" />
               </button>
               {showCategoryDropdown && (
-                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 min-w-[180px] border border-gray-700">
+                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 w-full sm:min-w-[180px] border border-gray-700">
                   {['All', 'Web Exploitation', 'Binary Exploitation', 'Cryptography', 'Forensics'].map(cat => (
                     <button
                       key={cat}
@@ -232,7 +230,7 @@ const ChallengesPage = () => {
                         setShowCategoryDropdown(false);
                         setCurrentPage(1);
                       }}
-                      className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
+                      className="block w-full text-left px-4 py-2 text-sm sm:text-base text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
                     >
                       {cat}
                     </button>
@@ -242,20 +240,20 @@ const ChallengesPage = () => {
             </div>
 
             {/* Status Filter */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-initial">
               <button 
                 onClick={() => {
                   setShowStatusDropdown(!showStatusDropdown);
                   setShowDifficultyDropdown(false);
                   setShowCategoryDropdown(false);
                 }}
-                className="bg-gray-800 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-700 flex items-center gap-2 min-w-[140px]"
+                className="w-full sm:w-auto bg-gray-800 text-gray-300 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg hover:bg-gray-700 flex items-center justify-between gap-2 sm:min-w-[140px] text-sm sm:text-base"
               >
                 {selectedStatus === 'not-started' ? 'Not Started' : selectedStatus === 'completed' ? 'Completed' : 'All'}
                 <ChevronDown size={16} />
               </button>
               {showStatusDropdown && (
-                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 min-w-[140px] border border-gray-700">
+                <div className="absolute top-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10 w-full sm:min-w-[140px] border border-gray-700">
                   {[
                     { value: 'All', label: 'All' },
                     { value: 'not-started', label: 'Not Started' },
@@ -268,7 +266,7 @@ const ChallengesPage = () => {
                         setShowStatusDropdown(false);
                         setCurrentPage(1);
                       }}
-                      className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
+                      className="block w-full text-left px-4 py-2 text-sm sm:text-base text-gray-300 hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg"
                     >
                       {status.label}
                     </button>
@@ -280,40 +278,40 @@ const ChallengesPage = () => {
         </div>
 
         {/* Challenges Grid - Fixed height */}
-        <div className="flex-1 p-8 flex flex-col overflow-hidden">
-          <div className="grid grid-cols-3 gap-6 mb-8 flex-1">
+        <div className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-4 sm:mb-6 md:mb-8 flex-1 overflow-y-auto">
             {currentChallenges.map((challenge) => (
               <div 
                 key={challenge.id}
-                className="bg-[#1a1a1a] border border-gray-800 rounded-xl p-6 relative flex flex-col"
+                className="bg-[#1a1a1a] border border-gray-800 rounded-xl p-4 sm:p-5 md:p-6 relative flex flex-col"
               >
                 {/* Status Icon */}
-                <div className="absolute top-6 right-6">
+                <div className="absolute top-4 sm:top-5 md:top-6 right-4 sm:right-5 md:right-6">
                   {challenge.status === "completed" ? (
                     <div className="bg-green-600 rounded-full p-1">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                   ) : (
-                    <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <circle cx="12" cy="12" r="10" strokeWidth={2} strokeDasharray="4 4" />
                     </svg>
                   )}
                 </div>
 
-                <h3 className="text-2xl font-bold mb-2 pr-8">{challenge.title}</h3>
-                <p className="text-gray-400 mb-3">{challenge.category}</p>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 pr-8 sm:pr-10">{challenge.title}</h3>
+                <p className="text-gray-400 mb-2 sm:mb-3 text-sm sm:text-base">{challenge.category}</p>
                 
-                <div className="flex items-center justify-between mb-4 mt-auto">
-                  <span className={`${getDifficultyColor(challenge.difficulty)} text-white text-xs font-semibold px-3 py-1 rounded`}>
+                <div className="flex items-center justify-between mb-3 sm:mb-4 mt-auto">
+                  <span className={`${getDifficultyColor(challenge.difficulty)} text-white text-xs font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded`}>
                     {challenge.difficulty}
                   </span>
-                  <span className="text-gray-400 font-bold">{challenge.xp}XP</span>
+                  <span className="text-gray-400 font-bold text-sm sm:text-base">{challenge.xp}XP</span>
                 </div>
 
                 <button 
-                  className={`w-full py-3 rounded-lg font-semibold transition-all ${getButtonStyle(challenge.status)}`}
+                  className={`w-full py-2 sm:py-2.5 md:py-3 rounded-lg font-semibold transition-all text-sm sm:text-base ${getButtonStyle(challenge.status)}`}
                 >
                   {getButtonText(challenge.status)}
                 </button>
@@ -322,13 +320,13 @@ const ChallengesPage = () => {
           </div>
 
           {/* Pagination - Fixed at bottom */}
-          <div className="flex items-center justify-center gap-2 mt-auto pb-4">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-auto pb-2 sm:pb-4">
             <button 
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="text-gray-500 hover:text-white p-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="text-gray-500 hover:text-white p-1 sm:p-2 disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -338,9 +336,9 @@ const ChallengesPage = () => {
             <button 
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="text-gray-500 hover:text-white p-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="text-gray-500 hover:text-white p-1 sm:p-2 disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
