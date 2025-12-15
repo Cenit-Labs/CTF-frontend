@@ -44,7 +44,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
   const colleges = [
     'Select college',
-    'Ravish Tech Univ',
+    'Ramann Clg of Thenditharam',
     'Adi shankara',
   ];
 
