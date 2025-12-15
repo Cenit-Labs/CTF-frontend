@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { User, Menu, Target, BookOpen, Calendar, Users, ChevronDown } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
+import ChallengePopup from '@/components/challengepopup';
 
 const ChallengesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +14,7 @@ const ChallengesPage = () => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedChallenge, setSelectedChallenge] = useState<any>(null);
 
   const allChallenges = [
     { id: 1, title: "SQL Injection", category: "Web Exploitation", difficulty: "Easy", xp: 100, status: "not-started" },
@@ -32,7 +34,7 @@ const ChallengesPage = () => {
     { id: 15, title: "SQL Injection", category: "Web Exploitation", difficulty: "Easy", xp: 100, status: "not-started" },
   ];
 
-  const challengesPerPage = 6; // 2 rows x 3 columns on desktop
+  const challengesPerPage = 6;
 
   // Filter challenges
   const filteredChallenges = allChallenges.filter(challenge => {
@@ -277,7 +279,7 @@ const ChallengesPage = () => {
           </div>
         </div>
 
-        {/* Challenges Grid - Fixed height */}
+        {/* Challenges Grid */}
         <div className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col overflow-hidden">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-4 sm:mb-6 md:mb-8 flex-1 overflow-y-auto">
             {currentChallenges.map((challenge) => (
@@ -311,6 +313,7 @@ const ChallengesPage = () => {
                 </div>
 
                 <button 
+                  onClick={() => setSelectedChallenge(challenge)}
                   className={`w-full py-2 sm:py-2.5 md:py-3 rounded-lg font-semibold transition-all text-sm sm:text-base ${getButtonStyle(challenge.status)}`}
                 >
                   {getButtonText(challenge.status)}
@@ -319,7 +322,7 @@ const ChallengesPage = () => {
             ))}
           </div>
 
-          {/* Pagination - Fixed at bottom */}
+          {/* Pagination */}
           <div className="flex items-center justify-center gap-1 sm:gap-2 mt-auto pb-2 sm:pb-4">
             <button 
               onClick={() => goToPage(currentPage - 1)}
@@ -345,6 +348,14 @@ const ChallengesPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Challenge Popup */}
+      {selectedChallenge && (
+        <ChallengePopup 
+          challenge={selectedChallenge} 
+          onClose={() => setSelectedChallenge(null)} 
+        />
+      )}
     </div>
   );
 };
